@@ -1,6 +1,6 @@
 import { User } from "./UserManager";
 
-let GLOBAL_ROOM_ID = 0;
+let GLOBAL_ROOM_ID = 1;
 
 interface Room {
     user1: User;
@@ -22,11 +22,25 @@ export class RoomManager {
         });
     }
 
+    // deleteRoom(roomId: string) {
+    //     const room = this.rooms.get(roomId);
+    //     if(room) {
+    //         room.user1?.socket.emit("room-deleted", {
+    //             roomId
+    //         });
+    //         room.user2?.socket.emit("room-deleted", {
+    //             roomId
+    //         });
+    //         this.rooms.delete(roomId);
+    //     }
+    // }
+
     onOffer(roomId: string, sdp: string) {
         const room = this.rooms.get(roomId);
         if(room) {
             room.user2?.socket.emit("offer", {
-                sdp
+                sdp,
+                roomId
             });
         }
     }
@@ -35,7 +49,8 @@ export class RoomManager {
         const room = this.rooms.get(roomId);
         if(room) {
             room.user1?.socket.emit("answer", {
-                sdp
+                sdp,
+                roomId
             });
         }
     }
